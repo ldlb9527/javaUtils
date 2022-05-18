@@ -1,5 +1,5 @@
 package com.ldlb.lock;
 
-public interface Func0<T> {
-    T accept();
+public interface Act0 {
+    void accept();
 }

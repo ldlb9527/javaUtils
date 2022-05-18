@@ -1,6 +1,6 @@
-package com.xcbio.libs.functions;
+package com.ldlb.lock;
 
-//@FunctionalInterface
+
 public interface ActE {
     void accept() throws Exception;
 }

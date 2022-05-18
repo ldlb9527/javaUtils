@@ -6,6 +6,11 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * 根据hashMap实现分段锁（ReentrantLock）,提供lock tryLock  unlock atomic
+ * 直接使用atomic等重载方法不用关心锁的获取和释放
+ * @param <T>
+ */
 public class SegmentLock<T> {
     private Integer segments = 16;//默认分段数量
     private HashMap<Integer, Lock> lockMap = new HashMap<>();

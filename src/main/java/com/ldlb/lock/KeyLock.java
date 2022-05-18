@@ -1,4 +1,5 @@
 package com.ldlb.lock;
 
-public class KeyLock {
+public class KeyLock<T> {
+
 }
