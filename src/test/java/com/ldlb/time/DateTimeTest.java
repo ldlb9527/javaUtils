@@ -9,9 +9,9 @@ public class DateTimeTest {
 
 
     @Test
-    public void testDiff() {
-        DateTime dateTime = DateTime.now().moveInYear(0, 1, 0);
-        System.out.println(dateTime.ISODateTime());
-        System.out.println(dateTime.toUtilDate());
+    public void test() throws Exception {
+        String s = DateTime.beginOfDay(2020, 1, 1).ISODateTime();
+        System.out.println(s);
+
     }
 }
