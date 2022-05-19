@@ -4,8 +4,10 @@ import java.util.Map;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.BiConsumer;
 
 public class KeyLock<T> {
 
@@ -32,6 +34,37 @@ public class KeyLock<T> {
     public void unlock(T key){
         Lock lock = lockMap.computeIfAbsent(key, t -> new ReentrantLock());
         lock.lock();
+        clearLock();
+    }
+
+    public void clearLock() {
+        if (lockMap.size() < 1000) return;
+
+        lockMap.forEach((key, lock) -> {
+            ReentrantLock reentrantLock = null;
+            try {
+                reentrantLock = (ReentrantLock)lock;
+                if (reentrantLock.isLocked() || !reentrantLock.tryLock()) return;
+                lockMap.remove(key,reentrantLock);
+            }catch (Exception e){
+                e.printStackTrace();
+            }finally {
+                reentrantLock.unlock();
+            }
+        });
+    }
+
+    public void atomic(T key,Act0 act) {
+        AtomicReference<Exception> error = new AtomicReference<>(null);
+        try {
+            this.lock(key);
+            act.accept();
+        } catch (Exception e) {
+            error.set(e);
+        }finally {
+            this.unlock(key);
+        }
+        if (error.get()!= null) throw new RuntimeException(error.get());
     }
 
 }
