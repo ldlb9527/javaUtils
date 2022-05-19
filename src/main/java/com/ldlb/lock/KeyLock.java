@@ -33,11 +33,11 @@ public class KeyLock<T> {
 
     public void unlock(T key){
         Lock lock = lockMap.computeIfAbsent(key, t -> new ReentrantLock());
-        lock.lock();
-        clearLock();
+        lock.unlock();
+        clearCacheLock();
     }
 
-    public void clearLock() {
+    public void clearCacheLock() {
         if (lockMap.size() < 1000) return;
 
         lockMap.forEach((key, lock) -> {
