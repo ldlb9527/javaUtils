@@ -46,6 +46,7 @@ public class KeyLock<T> {
                 reentrantLock = (ReentrantLock)lock;
                 if (reentrantLock.isLocked() || !reentrantLock.tryLock()) return;
                 lockMap.remove(key,reentrantLock);
+                reentrantLock.lockInterruptibly(); //其他线程可能已经持有锁对象
             }catch (Exception e){
                 e.printStackTrace();
             }finally {
